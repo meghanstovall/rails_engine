@@ -13,4 +13,12 @@ RSpec.describe Item, type: :model do
     it {should have_many :invoice_items}
     it {should have_many(:invoices).through(:invoice_items)}
   end
+
+  describe 'methods' do
+    it '#convert_price' do
+      item = Item.create({name: "mountain bike", description: "Good for beginners", unit_price: 22555})
+
+      expect(item.convert_price).to eq(225.55)
+    end
+  end
 end
