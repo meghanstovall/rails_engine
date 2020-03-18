@@ -4,5 +4,9 @@ class ItemSerializer
   has_many :invoice_items
   has_many :invoices, through: :invoice_items
 
-  attributes :id, :description, :unit_price
+  attributes :id, :name, :description
+
+  attribute :unit_price do |item|
+    item.convert_price
+  end
 end
