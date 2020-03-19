@@ -26,7 +26,7 @@ describe 'Merchants API' do
   it "can create a new merchant" do
     merchant_params = {name: "Willms and Sons"}
 
-    post "/api/v1/merchants", params: {merchant: merchant_params}
+    post "/api/v1/merchants", params: merchant_params
     merchant = Merchant.last
 
     expect(response).to be_successful
@@ -38,7 +38,7 @@ describe 'Merchants API' do
     previous_name = Merchant.last.name
     merchant_params = {name: "Sledge"}
 
-    put "/api/v1/merchants/#{id}", params: {merchant: merchant_params}
+    put "/api/v1/merchants/#{id}", params: merchant_params
     merchant = Merchant.find_by(id: id)
 
     expect(response).to be_successful
@@ -54,5 +54,20 @@ describe 'Merchants API' do
     expect(response).to be_successful
     expect(Merchant.count).to eq(0)
     expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it "can get to items index page of specific merchant" do
+    merchant = create(:merchant)
+    3.times do
+      item_params = {name: "Saw", description: "I want to play a game", unit_price: 25, merchant_id: merchant.id}
+      post "/api/v1/items", params: item_params
+    end
+
+    get "/api/v1/merchants/#{merchant.id}/items"
+
+    items = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    expect(items.count).to eq(3)
   end
 end
