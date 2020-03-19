@@ -27,7 +27,7 @@ describe 'Items API' do
     merchant_id = create(:merchant).id
     item_params = {name: "Saw", description: "I want to play a game", unit_price: 25, merchant_id: merchant_id}
 
-    post "/api/v1/items", params: {item: item_params}
+    post "/api/v1/items", params: item_params
     item = Item.last
 
     expect(response).to be_successful
@@ -39,7 +39,7 @@ describe 'Items API' do
     previous_name = Item.last.name
     item_params = { name: "Sledge" }
 
-    put "/api/v1/items/#{id}", params: {item: item_params}
+    put "/api/v1/items/#{id}", params: item_params
     item = Item.find_by(id: id)
 
     expect(response).to be_successful
@@ -55,5 +55,20 @@ describe 'Items API' do
     expect(response).to be_successful
     expect(Item.count).to eq(0)
     expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it "can get to merchant show page of specific item" do
+    merchant_id = create(:merchant).id
+    item_params = {name: "Saw", description: "I want to play a game", unit_price: 25, merchant_id: merchant_id}
+
+    post "/api/v1/items", params: item_params
+    item = Item.last
+
+    get "/api/v1/items/#{item.id}/merchant"
+
+    merchant = JSON.parse(response.body)["data"]
+
+    expect(response).to be_successful
+    expect(merchant["attributes"]["id"]).to eq(merchant_id)
   end
 end
