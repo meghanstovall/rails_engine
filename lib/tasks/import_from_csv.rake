@@ -2,7 +2,6 @@ require 'csv'
 
 task :import_from_csv => :environment do
 
-
   customers = CSV.read("./db/data/customers.csv", headers: true, header_converters: :symbol)
   customers.each do |customer|
     ActiveRecord::Base.connection.reset_pk_sequence!('customers')
