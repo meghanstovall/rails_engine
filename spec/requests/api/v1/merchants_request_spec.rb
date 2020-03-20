@@ -8,7 +8,7 @@ describe 'Merchants API' do
 
     expect(response).to be_successful
 
-    items = JSON.parse(response.body)["data"]
+    items = JSON.parse(response.body, symbolize_names: true)[:data]
     expect(items.count).to eq(3)
   end
 
@@ -17,10 +17,10 @@ describe 'Merchants API' do
 
     get "/api/v1/merchants/#{id}"
 
-    merchant = JSON.parse(response.body)["data"]
+    merchant = JSON.parse(response.body, symbolize_names: true)[:data]
 
     expect(response).to be_successful
-    expect(merchant["attributes"]["id"]).to eq(id)
+    expect(merchant[:attributes][:id]).to eq(id)
   end
 
   it "can create a new merchant" do
@@ -65,7 +65,7 @@ describe 'Merchants API' do
 
     get "/api/v1/merchants/#{merchant.id}/items"
 
-    items = JSON.parse(response.body)["data"]
+    items = JSON.parse(response.body, symbolize_names: true)[:data]
 
     expect(response).to be_successful
     expect(items.count).to eq(3)
