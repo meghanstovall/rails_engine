@@ -47,8 +47,7 @@ describe 'Items API' do
     end
 
     it "can find an item by merchant id" do
-      merchant = create(:merchant)
-      new_item = create(:item, merchant_id: merchant.id)
+      new_item = create(:item)
 
       get "/api/v1/items/find?merchant_id=#{new_item.merchant.id}"
 
