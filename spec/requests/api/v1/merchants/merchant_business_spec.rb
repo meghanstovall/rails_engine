@@ -39,24 +39,15 @@ describe 'Merchants API' do
       expect(merchants[-1][:attributes][:name]).to eq(@merchant3.name)
     end
 
-    # it "can return variable number of merchants that have sold the most items" do
-    #   get "/api/v1/merchants/most_items?quantity=2"
-    #
-    #   merchants = JSON.parse(response.body, symbolize_names: true)[:data]
-    #
-    #   expect(response).to be_successful
-    #   expect(merchants.count).to eq(2)
-    #   expect(merchants[0][:attributes][:name]).to eq(@merchant1.name)
-    #   expect(merchants[-1][:attributes][:name]).to eq(@merchant2.name)
-    # end
+    it "can return variable number of merchants that have sold the most items" do
+      get "/api/v1/merchants/most_items?quantity=2"
 
-    it "can return total revenue across all merchants between date range" do
-      get "/api/v1/revenue?start=2020-03-21&end=2020-03-31"
-
-      data = JSON.parse(response.body, symbolize_names: true)[:data]
+      merchants = JSON.parse(response.body, symbolize_names: true)[:data]
 
       expect(response).to be_successful
-      expect(data[:attributes][:revenue]).to eq(10045.0)
+      expect(merchants.count).to eq(2)
+      expect(merchants[0][:attributes][:name]).to eq(@merchant2.name)
+      expect(merchants[-1][:attributes][:name]).to eq(@merchant3.name)
     end
 
     it "can return a merchants revenue" do
