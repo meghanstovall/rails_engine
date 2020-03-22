@@ -60,15 +60,15 @@ RSpec.describe Merchant, type: :model do
       expect(Merchant.most_revenue(2)).to eq([@merchant2, @merchant3])
     end
 
-    # it "#most_items" do
-    #   expect(Merchant.most_items())
-    # end
+    it "#most_items" do
+      expect(Merchant.most_items(2)).to eq([@merchant2, @merchant3])
+    end
 
     it "#total_date_revenue" do
       start_date = "2020-03-21"
       end_date = "2020-03-31"
 
-      expect(Merchant.total_date_revenue(start_date.to_date, end_date.to_date)).to eq(10045.0)
+      expect(Merchant.total_date_revenue(start_date.to_time, end_date.to_time)).to eq(10045.0)
     end
 
     it "#merchant_revenue" do
