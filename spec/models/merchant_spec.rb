@@ -12,12 +12,38 @@ RSpec.describe Merchant, type: :model do
   end
 
   describe 'methods' do
-    it "#single_search" do
-      merchant1 = Merchant.create!(name: "Tom")
-      merchant2 = Merchant.create!(name: "Tommy")
-      search_params = {name: "Tom"}
+    before :each do
+      @merchant1 = Merchant.create!(name: "Willms and Sons")
+      @merchant2 = Merchant.create!(name: "Turing School")
+      @merchant3 = Merchant.create!(name: "Pets 4 Paws")
+      @merchant4 = Merchant.create!(name: "Ring World")
+      @customer = Customer.create!(first_name: "Matteo", last_name: "Sludge")
 
+      @invoice1 = Invoice.create!(status: "shipped", customer: @customer, merchant: @merchant1)
+      @invoice2 = Invoice.create!(status: "shipped", customer: @customer, merchant: @merchant2)
+      @invoice3 = Invoice.create!(status: "shipped", customer: @customer, merchant: @merchant3)
+
+      @item1 = Item.create!(name: "fishing pole", description: "good for beginners", unit_price: 20, merchant: @merchant1)
+      @item2 = Item.create!(name: "mac book pro", description: "good for beginner coders", unit_price: 1000, merchant: @merchant2)
+      @item3 = Item.create!(name: "dog bowl", description: "for small dogs", unit_price: 5, merchant: @merchant3)
+      @item4 = Item.create!(name: "fly fishing pole", description: "good for advanced", unit_price: 80, merchant: @merchant1)
+      @item5 = Item.create!(name: "rain coat", description: "red and all sizes", unit_price: 15, merchant: @merchant1)
+      @item6 = Item.create!(name: "t-shirt", description: "good for everyone", unit_price: 5, merchant: @merchant2)
+
+      @pole_willms = InvoiceItem.create!(quantity: 1, unit_price: 20, item: @item1, invoice: @invoice1)
+      @mac_turing = InvoiceItem.create!(quantity: 10, unit_price: 1000, item: @item2, invoice: @invoice2)
+      @dog_paws = InvoiceItem.create!(quantity: 5, unit_price: 5, item: @item3, invoice: @invoice3)
+
+      @transaction1 = create(:transaction, invoice: @invoice1)
+      @transaction2 = create(:transaction, invoice: @invoice2)
+      @transaction3 = create(:transaction, invoice: @invoice3)
+    end
+
+    it "#single_search" do
+      search_params = {name: "ring"}
+      
       expect(Merchant.single_search(search_params).first.class).to eq(Merchant)
+      expect(Merchant.single_search(search_params).count).to eq(1)
     end
 
     it "#multi_search" do
@@ -27,6 +53,21 @@ RSpec.describe Merchant, type: :model do
       search_params = {name: "Tom"}
 
       expect(Merchant.multi_search(search_params).count).to eq(2)
+    end
+
+    it "#most_revenue" do
+      expect(Merchant.most_revenue(1)).to eq([@merchant2])
+      expect(Merchant.most_revenue(2)).to eq([@merchant2, @merchant3])
+    end
+
+    # it "#most_items" do
+    #   expect(Merchant.most_items())
+    # end
+
+    it "#merchant_revenue" do
+      expect(Merchant.merchant_revenue(@merchant1.id)).to eq(20.0)
+      expect(Merchant.merchant_revenue(@merchant2.id)).to eq(10000.0)
+      expect(Merchant.merchant_revenue(@merchant3.id)).to eq(25.0)
     end
   end
 end
