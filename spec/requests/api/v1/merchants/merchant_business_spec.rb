@@ -51,7 +51,7 @@ describe 'Merchants API' do
     # end
 
     it "can return total revenue across all merchants between date range" do
-      get "/api/v1/merchants/revenue?start=2020-03-21&end=2020-03-31"
+      get "/api/v1/revenue?start=2020-03-21&end=2020-03-31"
 
       data = JSON.parse(response.body, symbolize_names: true)[:data]
 
