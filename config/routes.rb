@@ -22,7 +22,6 @@ Rails.application.routes.draw do
         get "/most_revenue", to: "revenues#index"
         get "/most_items", to: "revenues#most_items"
         get "/:id/revenue", to: "revenues#show"
-        # get "/revenue", to: "revenues#total_revenue"
       end
 
       resources :merchants, except: [:new, :edit] do
