@@ -28,10 +28,18 @@ class Merchant < ApplicationRecord
       .group(:id).order('revenue DESC').limit(limit_num.to_i)
   end
 
-  def self.most_items(limit_num)
-    require "pry"; binding.pry
-    joins(:transactions, :invoice_items).where(transactions: {result: "success"})
-      .select('merchants.*')
+  # def self.most_items(limit_num)
+  #   require "pry"; binding.pry
+  #   joins(:transactions, :invoice_items).where(transactions: {result: "success"})
+  #     .select('merchants.*')
+  # end
+
+  def self.total_date_revenue(start_date, end_date)
+    merchants = joins(:transactions, :invoice_items)
+      .where(transactions: {result: "success"}, created_at: start_date..end_date)
+      .select('merchants.*, SUM(invoice_items.quantity * invoice_items.unit_price) AS revenue')
+      .group(:id)
+    merchants.sum(&:revenue)
   end
 
   def self.merchant_revenue(merchant_id)
