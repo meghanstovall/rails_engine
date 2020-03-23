@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
 
-      get "/revenue", to: "revenue#total_revenue"
+      get "/revenue", to: "revenue#index"
 
       namespace :items do
         get "/find", to: "search#show"
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
         get "/find", to: "search#show"
         get "/find_all", to: "search#index"
         get "/most_revenue", to: "revenues#index"
-        get "/most_items", to: "revenues#most_items"
+        get "/most_items", to: "most_items#index"
         get "/:id/revenue", to: "revenues#show"
       end
 
